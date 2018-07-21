@@ -1,0 +1,2 @@
+# SmartMirror
+SmartMirror for Hackathon
