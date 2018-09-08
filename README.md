@@ -2,9 +2,7 @@
 A machine learning based beauty hub, powered by the Raspberry Pi
 
 # Hardware
-A Dell Monitor
-A Rasberry Pi 3B running on Rasbien
-Pi Cam
+A Dell Monitor, a Rasberry Pi 3B running on Rasbien, and a Pi Cam
 
 # api used
 Baidu AI face detection http://ai.baidu.com/tech/face/detect
