@@ -1,3 +1,12 @@
+"""
+    Created on July 20,
+    Author: Bo Ni, Zhuofan Ying, Yuqiu Li, Mingye Wang
+    
+"""
+
+# Crawl girl's pictures from http://img.mmjpg.com/
+# All rights reserved
+
 import requests
 from bs4 import BeautifulSoup
 import re
@@ -8,7 +17,7 @@ def GetSetAmount():
     homepage = 'http://www.mmjpg.com/'
     r_homepage = requests.get(homepage, headers = header)
     if r_homepage.status_code == 200:
-        print('当前网页访问正常')
+        print('Connection estabished')
     r_homepage.encoding = r_homepage.apparent_encoding
     html_homepage = r_homepage.text
     soup_homepage = BeautifulSoup(html_homepage, 'html.parser')
@@ -16,7 +25,7 @@ def GetSetAmount():
     LatestImg_url = soup_homepage.img.attrs['src']
 #    print(LatestImg_url)
 #    print(type(LatestImg_url))
-    print('网站当前共有：', LatestImg_url[-8:-4], '个图片集')
+    print('There are：', LatestImg_url[-8:-4], 'picture sets')
     SetAmount = LatestImg_url[-8:-4]
     return SetAmount
 
@@ -27,7 +36,7 @@ def GetPicSet_url():
     for Set_n in range(1, setamount+1):
         yield 'http://www.mmjpg.com/mm/' + str(Set_n)  
 
-'''获取每个图集的图片数量'''
+'''Get number of pictures in each set'''
 def GetPicAmount_EverySet(PicSet_url):
     r_set = requests.get(PicSet_url, headers = header)
     r_set.encoding = r_set.apparent_encoding
@@ -38,7 +47,7 @@ def GetPicAmount_EverySet(PicSet_url):
     PicAmount = tag_lastpage.string
     return PicAmount
 
-'''获取每张图片的url'''
+'''Get the url for each picture'''
 def GetImg_url(Pic_url):
     r_pic = requests.get(Pic_url, headers = header)
     r_pic.encoding = r_pic.apparent_encoding
@@ -50,7 +59,7 @@ def GetImg_url(Pic_url):
     Img_url = imgTag.attrs['src']
     return Img_url
 
-'''保存图片'''
+'''Save the picture to the directory'''
 def GetJpg():
     for PicSet_url in GetPicSet_url():
         global Set_n

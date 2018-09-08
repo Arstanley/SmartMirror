@@ -9,7 +9,6 @@ def convert2onehot(data):
     # covert data to onehot representation
     return pd.get_dummies(data)
 
-
 def convert(text):
     result = [x for x in re.split("\(|,|\)",text)if x]
     for i in range(len(result)):

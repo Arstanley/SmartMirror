@@ -3,7 +3,7 @@
 """
 Created on Fri Jul 20 23:49:37 2018
 
-@author: apple
+@author: Bo
 """
 
 # -*- coding: UTF-8 -*-  
@@ -23,38 +23,37 @@ import os
 import pandas as pd 
 from pandas import Series, DataFrame
 
-# 定义常量
+# 定义常量 (Define the user info for Baidu Face Recognition API)
 APP_ID = '11565043'
 API_KEY = '8iKksmE52bSq9fNev6jqV12v'
 SECRET_KEY = 'BzVIMw5CIrZKnMgHiurMRQlWiUS0AvFE'
 
-# 设置人脸识别参数（全局）
+# 设置人脸识别参数（Set the constant for the API）
 options = {}
 options["face_field"] = "landmark"
 options["max_face_num"] = 1
 nameList = []
 kouhongrgb = []
 skinColorRgb = []
-###Function to create a list for the filenames in the directory
+
 def getAverage(x, y):
 	return (x+y)/2
 
+# 标准化文件名(Normalize the filenames for iteration)
 def listDir(rootDir):
 	for filename in os.listdir(rootDir):
 		pathname = os.path.join(rootDir, filename)
 		if (os.path.isfile(filename)):
 			nameList.append(pathname)
 
-def getAverageRGB(sampleLandmark72):
-	x1 = landmark72[59]['x'] 
-
-# 初始化AipFace对象  
+# 初始化AipFace对象(Initialize the objective of aipFace)
 aipFace = AipFace(APP_ID, API_KEY, SECRET_KEY)
 
-# 读取图片
+# 读取图片(Initialize the directory; Pictures with girl's faces are in the directory)
 listDir('/Users/Arstan/Documents/Hackathon')
 
-for i in nameList[2000:2500]:
+# 对文件进行迭代(Iterate the picture files in the directory)
+for i in nameList[0:2500]:
 	with open(i, "rb") as f:
 		base64_data = base64.b64encode(f.read())
 	
@@ -63,13 +62,14 @@ for i in nameList[2000:2500]:
 	result = aipFace.detect(str(base64_data)[2:], "BASE64", options)
 	if result['error_code'] == 0:
 
+        # landmark72: 百度人脸识别API中获取人脸72个点的函数(landmark72: Function in the API that can get 72 points of a people's face）
 		landmark72 = result['result']['face_list'][0]['landmark72']
 		
-
-		# 计算口红颜色（取嘴唇上的六个点然后取rgb平均值
-		im = Image.open(i)
+        im = Image.open(i)
 		pix = im.load()
-
+        
+        # 计算口红颜色（取嘴唇上的六个点然后取rgb平均值）
+        # Calculate the color of the lipstick (Get 6 points from the lipstick and calculate the average RGB)
 		x_1, y_1 = landmark72[59]['x'], landmark72[59]['y']
 		x_2, y_2 = landmark72[66]['x'], landmark72[66]['y']
 		x1 = getAverage(x_1, x_2)
@@ -121,6 +121,7 @@ for i in nameList[2000:2500]:
 		kouhongrgb.append(rgb)
 
 	    # 提取肤色rgb
+        # Get the skin color RGB with the same method
 
 		x_1, y_1 = landmark72[48]['x'], landmark72[48]['y']
 		x_2, y_2 = landmark72[55]['x'], landmark72[55]['y']
